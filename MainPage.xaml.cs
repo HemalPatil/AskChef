@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -185,69 +183,59 @@ namespace AskChef
 		}
 	}
 
-	public sealed partial class Scenario2_Load : Page
-	{
-		private readonly Conversation conversation = new Conversation();
-
-		public Scenario2_Load()
-		{
-			this.InitializeComponent();
-
-			chatView.ItemsSource = this.conversation;
-
-			chatView.ContainerContentChanging += OnChatViewContainerContentChanging;
-		}
-
-		async void SendTextMessage()
-		{
-			if (MessageTextBox.Text.Length > 0)
-			{
-				this.conversation.Add(new TextMessage
-				{
-					Message = MessageTextBox.Text,
-					Time = DateTime.Now,
-					IsSent = true
-				});
-				MessageTextBox.Text = string.Empty;
-
-				// Send a simulated reply after a brief delay.
-				await Task.Delay(TimeSpan.FromSeconds(2));
-
-				this.conversation.Add(new TextMessage
-				{
-					Message = Conversation.CreateRandomMessage(),
-					Time = DateTime.Now,
-					IsSent = false
-				});
-			}
-		}
-
-		private void OnChatViewContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
-		{
-			if (args.InRecycleQueue) return;
-			TextMessage message = (TextMessage)args.Item;
-			args.ItemContainer.HorizontalAlignment = message.IsSent ? Windows.UI.Xaml.HorizontalAlignment.Right : Windows.UI.Xaml.HorizontalAlignment.Left;
-		}
-
-		private void MessageTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
-		{
-			if (e.Key == VirtualKey.Enter)
-			{
-				this.SendTextMessage();
-			}
-		}
-	}
-
 	public sealed partial class MainPage : Page
 	{
-		public MainPage()
+        private readonly Conversation conversation = new Conversation();
+
+        public MainPage()
 		{
 			this.InitializeComponent();
-		}
+            ChatCanvas.ItemsSource = this.conversation;
+            ChatCanvas.ContainerContentChanging += OnChatViewContainerContentChanging;
+        }
 
 		private void HamburgerButton_Click(object sender, RoutedEventArgs e)
 		{
 			NavigationMenu.IsPaneOpen = !NavigationMenu.IsPaneOpen;
 		}
-	}
+
+        async void SendTextMessage()
+        {
+            if (UserInputTextBox.Text.Length > 0)
+            {
+                this.conversation.Add(new TextMessage
+                {
+                    Message = UserInputTextBox.Text,
+                    Time = DateTime.Now,
+                    IsSent = true
+                });
+                UserInputTextBox.Text = string.Empty;
+
+                // Send a simulated reply after a brief delay.
+                await Task.Delay(TimeSpan.FromSeconds(2));
+
+                this.conversation.Add(new TextMessage
+                {
+                    Message = Conversation.CreateRandomMessage(),
+                    Time = DateTime.Now,
+                    IsSent = false
+                });
+            }
+        }
+
+        private void UserInputTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                this.SendTextMessage();
+            }
+        }
+
+        private void OnChatViewContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+        {
+            if (args.InRecycleQueue) return;
+            TextMessage message = (TextMessage)args.Item;
+            args.ItemContainer.HorizontalAlignment = message.IsSent ? Windows.UI.Xaml.HorizontalAlignment.Right : Windows.UI.Xaml.HorizontalAlignment.Left;
+        }
+    }
 }
