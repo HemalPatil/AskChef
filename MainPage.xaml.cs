@@ -185,57 +185,57 @@ namespace AskChef
 
 	public sealed partial class MainPage : Page
 	{
-        private readonly Conversation conversation = new Conversation();
+		private readonly Conversation conversation = new Conversation();
 
-        public MainPage()
+		public MainPage()
 		{
 			this.InitializeComponent();
-            ChatCanvas.ItemsSource = this.conversation;
-            ChatCanvas.ContainerContentChanging += OnChatViewContainerContentChanging;
-        }
+			ChatCanvas.ItemsSource = this.conversation;
+			ChatCanvas.ContainerContentChanging += OnChatViewContainerContentChanging;
+		}
 
 		private void HamburgerButton_Click(object sender, RoutedEventArgs e)
 		{
 			NavigationMenu.IsPaneOpen = !NavigationMenu.IsPaneOpen;
 		}
 
-        async void SendTextMessage()
-        {
-            if (UserInputTextBox.Text.Length > 0)
-            {
-                this.conversation.Add(new TextMessage
-                {
-                    Message = UserInputTextBox.Text,
-                    Time = DateTime.Now,
-                    IsSent = true
-                });
-                UserInputTextBox.Text = string.Empty;
+		async void SendTextMessage()
+		{
+			if (UserInputTextBox.Text.Length > 0)
+			{
+				this.conversation.Add(new TextMessage
+				{
+					Message = UserInputTextBox.Text,
+					Time = DateTime.Now,
+					IsSent = true
+				});
+				UserInputTextBox.Text = string.Empty;
 
-                // Send a simulated reply after a brief delay.
-                await Task.Delay(TimeSpan.FromSeconds(2));
+				// Send a simulated reply after a brief delay.
+				await Task.Delay(TimeSpan.FromSeconds(2));
 
-                this.conversation.Add(new TextMessage
-                {
-                    Message = Conversation.CreateRandomMessage(),
-                    Time = DateTime.Now,
-                    IsSent = false
-                });
-            }
-        }
+				this.conversation.Add(new TextMessage
+				{
+					Message = Conversation.CreateRandomMessage(),
+					Time = DateTime.Now,
+					IsSent = false
+				});
+			}
+		}
 
-        private void UserInputTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter)
-            {
-                this.SendTextMessage();
-            }
-        }
+		private void UserInputTextBox_KeyUp(object sender, KeyRoutedEventArgs e)
+		{
+			if (e.Key == VirtualKey.Enter)
+			{
+				this.SendTextMessage();
+			}
+		}
 
-        private void OnChatViewContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
-        {
-            if (args.InRecycleQueue) return;
-            TextMessage message = (TextMessage)args.Item;
-            args.ItemContainer.HorizontalAlignment = message.IsSent ? Windows.UI.Xaml.HorizontalAlignment.Right : Windows.UI.Xaml.HorizontalAlignment.Left;
-        }
-    }
+		private void OnChatViewContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+		{
+			if (args.InRecycleQueue) return;
+			TextMessage message = (TextMessage)args.Item;
+			args.ItemContainer.HorizontalAlignment = message.IsSent ? Windows.UI.Xaml.HorizontalAlignment.Right : Windows.UI.Xaml.HorizontalAlignment.Left;
+		}
+	}
 }
