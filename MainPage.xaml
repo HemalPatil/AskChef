@@ -7,7 +7,64 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
 
-	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <SplitView x:Name="NavigationMenu" DisplayMode="CompactOverlay">
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Button x:Name="HamburgerButton" Style="{StaticResource HamburgerButtonStyle}" Content="&#xE700;" Click="HamburgerButton_Click" BorderThickness="0" />
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="48" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button FontFamily="Segoe MDL2 Assets" FontSize="16" Content="&#xE1A3;" Grid.Column="0" MinHeight="48" MinWidth="48" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0" />
+                        <TextBox x:Name="RecipeSearchBox" PlaceholderText="Search for a recipe" Margin="5,5,5,5" Grid.Column="1" />
+                    </Grid>
+                    <ListView x:Name="SearchCategories" Grid.Row="2">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="48" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Width="48" Height="48" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{x:Bind}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <x:String>Cuisine</x:String>
+                        <x:String>Ingredients</x:String>
+                        <x:String>Occasion</x:String>
+                    </ListView>
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="48" />
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="ChatCanvas" Grid.Row="0">
+                        <Button>Hello world</Button>
+                        <RadioButton IsChecked="False"></RadioButton>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="48" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="UserInput" PlaceholderText="Say Hi!" TextAlignment="Right" Grid.Column="0" Margin="5,5,5,5" />
+                        <Button x:Name="VoiceInputToggle" Content="&#xE720;" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="48" MinWidth="48" FontFamily="Segoe MDL2 Assets" FontSize="16" Grid.Column="1" BorderThickness="0" />
+                    </Grid>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
 
-	</Grid>
 </Page>
